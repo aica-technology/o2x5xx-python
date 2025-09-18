@@ -19,7 +19,8 @@ class DevicesMeta(enum.Enum):
               "LogicGraphConfigExtension": ".o2xlgc",
               "ApplicationConfigExtension": ".o2d5xxapp",
               "DeviceConfigExtension": ".o2d5xxcfg",
-              "PCICConfigExtension": ".o2xpcic"}
+              "PCICConfigExtension": ".o2xpcic",
+              "SnapshotImageExtension": ".o2d5xximg"}
     O2I5xx = {"ArticleNumber": ["O2I5xx",
                                 "O2I510", "O2I511", "O2I512",
                                 "O2I513", "O2I514", "O2I500",
@@ -29,7 +30,8 @@ class DevicesMeta(enum.Enum):
               "LogicGraphConfigExtension": ".o2xlgc",
               "ApplicationConfigExtension": ".o2i5xxapp",
               "DeviceConfigExtension": ".o2i5xxcfg",
-              "PCICConfigExtension": ".o2xpcic"}
+              "PCICConfigExtension": ".o2xpcic",
+              "SnapshotImageExtension": ".o2i5xximg"}
     O2I4xx = {"ArticleNumber": ["O2I4xx",
                                 "O2I410", "O2I412", "O2I414",
                                 "O2I400", "O2I420", "O2I402",
@@ -38,7 +40,8 @@ class DevicesMeta(enum.Enum):
               "LogicGraphConfigExtension": ".o2xlgc",
               "ApplicationConfigExtension": ".o2i4xxapp",
               "DeviceConfigExtension": ".o2i4xxcfg",
-              "PCICConfigExtension": ".o2xpcic"}
+              "PCICConfigExtension": ".o2xpcic",
+              "SnapshotImageExtension": ".o2i4xximg"}
     O2U5xx = {"ArticleNumber": ["O2U5xx",
                                 "O2U530", "O2U532", "O2U534",
                                 "O2U540", "O2U542", "O2U544"],
@@ -46,7 +49,29 @@ class DevicesMeta(enum.Enum):
               "LogicGraphConfigExtension": ".o2xlgc",
               "ApplicationConfigExtension": ".o2u5xxapp",
               "DeviceConfigExtension": ".o2u5xxcfg",
-              "PCICConfigExtension": ".o2xpcic"}
+              "PCICConfigExtension": ".o2xpcic",
+              "SnapshotImageExtension": ".o2u5xximg"}
+    O3D3xx = {"ArticleNumber": ["O3D3xx",
+                                "O3D300", "O3D301", "O3D302",
+                                "O3D303", "O3D304", "O3D305",
+                                "O3D310", "O3D311", "O3D312",
+                                "O3D313", "O3D314", "O3D315",
+                                "O3D350", "O3D351", "O3D352",
+                                "O3D353", "O3D354", "O3D355"],
+            "DeviceType": ["1:3", 0x003],
+            "LogicGraphConfigExtension": ".o3dlgc",
+            "ApplicationConfigExtension": ".o3d3xxapp",
+            "DeviceConfigExtension": ".o3d3xxcfg",
+            "PCICConfigExtension": ".o3dpcic",
+            "SnapshotImageExtension": ".o3d3xximg"}
+    O2C56x = {"ArticleNumber": ["O2C56x",
+                                "O2C560", "O2C562", "O2C564"],
+              "DeviceType": ["1:448", 0x1c0],
+              "LogicGraphConfigExtension": ".o2xlgc",
+              "ApplicationConfigExtension": ".o2c5xxapp",
+              "DeviceConfigExtension": ".o2c5xxcfg",
+              "PCICConfigExtension": ".o2xpcic",
+              "SnapshotImageExtension": ".o2x5xximg"}
 
     @classmethod
     def getData(cls, key, value):
@@ -55,7 +80,7 @@ class DevicesMeta(enum.Enum):
             if isinstance(_data, list):
                 for v in _data:
                     if v == value:
-                        return s
+                        return s.value
             else:
                 if _data == value:
-                    return s
+                    return s.value
