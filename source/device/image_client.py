@@ -28,12 +28,13 @@ class ImageClient(O2x5xxPCICDevice):
 		# enable result output again
 		self.turn_process_interface_output_on_or_off(1)
 
-		# read the image ids
-		self.image_IDs = self.read_image_ids()
-
+		self.get_answer()
+		
 		# read first frames
 		self.frames = []
-		self.read_next_frames()
+		self.contour_center = None
+		# read the image ids
+		self.image_IDs = self.get_image_ids()
 
 	@property
 	def number_images(self):
@@ -43,23 +44,6 @@ class ImageClient(O2x5xxPCICDevice):
 		:return: (int) number of images
 		"""
 		return self.image_IDs.__len__()
-
-	def read_image_ids(self):
-		"""
-		A function for reading the PCIC image output and parsing the image IDs.
-		The image IDs are stored in property self.image_IDs
-
-		:return: list of image ids
-		"""
-		ticket, answer = self.read_next_answer()
-
-		if ticket == b"0000":
-			delimiter = answer.find(b'stop')
-			if delimiter == -1:
-				print("stop identifier not found in result")
-				return []
-			ids = answer[5:delimiter].decode()
-			return ids.split(';')[0:-1]
 
 	@staticmethod
 	def _deserialize_image_chunk(data):
@@ -108,23 +92,63 @@ class ImageClient(O2x5xxPCICDevice):
 			counter += 1
 
 		return results
-
-	def read_next_frames(self):
+	
+	def get_answer(self):
 		"""
-		Function for reading next asynchronous frames.
+		Function to get and store the answer from the PCIC application.
+		:return: None
+		"""
+		# look for asynchronous output
+		self.ticket, self.answer = self.read_next_answer()
+
+	def get_image_ids(self):
+		"""
+		Function for getting the image IDs.
+		The image IDs are stored in property self.image_IDs
+
+		:return: list of image ids
+		"""
+		if self.ticket == b"0000":
+			delimiter = self.answer.find(b'stopid')
+			if delimiter == -1:
+				print("Stop identifier not found in result")
+				return []
+			ids = self.answer[6:delimiter].decode()
+			return ids.split(';')[0:-1]
+
+	def get_contour_centers(self):
+		"""
+		Function for getting contour centers.
+		Contour centers are stored in property self.frames
+
+		:return: None
+		"""
+		if self.ticket == b"0000":
+			contour_start = self.answer.find(b'cns')
+			contour_end = self.answer.find(b'cne')
+			if contour_start != -1 and contour_end != -1:
+				contour_data = self.answer[contour_start+3:contour_end].strip(b';')
+				try:
+					self.contour_center = contour_data.decode('ascii')
+				except Exception:
+					self.contour_center = contour_data
+			else:
+				print("Contour start or end identifier not found in result")
+				self.contour_center = "0;0;0;false"
+			
+	def get_next_frames(self):
+		"""
+		Function for getting next asynchronous frames.
 		Frames are stored in property self.frames
 
 		:return: None
 		"""
-		# look for asynchronous output
-		ticket, answer = self.read_next_answer()
-
-		if ticket == b"0000":
-			delimiter = answer.find(b'stop')
+		if self.ticket == b"0000":
+			delimiter = self.answer.find(b'cne')
 			if delimiter == -1:
-				print("stop identifier not found in result")
+				print("Stop identifier not found in result")
 				self.frames = []
-			result = self._deserialize_image_chunk(data=answer[delimiter+4:])
+			result = self._deserialize_image_chunk(data=self.answer[delimiter+3:])
 			self.frames = [result[i][1] for i in result]
 
 	def make_figure(self, idx):

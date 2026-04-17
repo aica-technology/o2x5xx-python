@@ -3,7 +3,7 @@ images_config = {
         {
             "id": "start_string",
             "type": "string",
-            "value": "star"
+            "value": "start"
         },
         {
             "id": "delimiter",
@@ -28,7 +28,35 @@ images_config = {
         {
             "id": "end_string",
             "type": "string",
-            "value": "stop"
+            "value": "stopid"
+        },
+        {
+            "id": "start_string",
+            "type": "string",
+            "value": "cns"
+        },
+        {
+            "id": "delimiter",
+            "type": "string",
+            "value": ";"
+        },
+        {
+            "format": {
+                "alignment": "left",
+                "fill": "\u0000"
+            },
+            "id": "StringOut0",
+            "type": "blob"
+        },
+        {
+            "id": "delimiter",
+            "type": "string",
+            "value": ";"
+        },
+        {
+            "id": "end_string",
+            "type": "string",
+            "value": "cne"
         },
         {
             "elements": [
