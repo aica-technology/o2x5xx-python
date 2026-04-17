@@ -111,7 +111,7 @@ class ImageClient(O2x5xxPCICDevice):
 		if self.ticket == b"0000":
 			delimiter = self.answer.find(b'stopid')
 			if delimiter == -1:
-				print("stop identifier not found in result")
+				print("Stop identifier not found in result")
 				return []
 			ids = self.answer[6:delimiter].decode()
 			return ids.split(';')[0:-1]
@@ -133,8 +133,8 @@ class ImageClient(O2x5xxPCICDevice):
 				except Exception:
 					self.contour_center = contour_data
 			else:
-				print("contour start or end identifier not found in result")
-				self.contour_center = "0;0;0"
+				print("Contour start or end identifier not found in result")
+				self.contour_center = "0;0;0;false"
 			
 	def get_next_frames(self):
 		"""
@@ -146,7 +146,7 @@ class ImageClient(O2x5xxPCICDevice):
 		if self.ticket == b"0000":
 			delimiter = self.answer.find(b'cne')
 			if delimiter == -1:
-				print("stop identifier not found in result")
+				print("Stop identifier not found in result")
 				self.frames = []
 			result = self._deserialize_image_chunk(data=self.answer[delimiter+3:])
 			self.frames = [result[i][1] for i in result]
