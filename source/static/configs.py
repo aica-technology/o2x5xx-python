@@ -3,7 +3,7 @@ images_config = {
         {
             "id": "start_string",
             "type": "string",
-            "value": "start"
+            "value": "startid"
         },
         {
             "id": "delimiter",

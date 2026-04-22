@@ -113,7 +113,7 @@ class ImageClient(O2x5xxPCICDevice):
 			if delimiter == -1:
 				print("Stop identifier not found in result")
 				return []
-			ids = self.answer[6:delimiter].decode()
+			ids = self.answer[8:delimiter].decode()
 			return ids.split(';')[0:-1]
 
 	def get_contour_centers(self):
